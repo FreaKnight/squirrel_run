@@ -1,0 +1,20 @@
+{
+  "name": "squirrel_run",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FreaKnight/squirrel_run.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FreaKnight/squirrel_run/issues"
+  },
+  "homepage": "https://github.com/FreaKnight/squirrel_run#readme"
+}
