@@ -6,7 +6,12 @@ let hops = 0;
 let done = false;
 let gotAcorn = false;
 /**
- * | | | | | | | | |o|
+ * Grid Example
+ * o = acorn placement
+ * s = staring position
+ * x = point of completion
+ * 
+ * |o| | | | | | | | |
  * | | | | | | | | | |
  * | | | | | | | | | |
  * | | | | | | | | | |
@@ -14,19 +19,13 @@ let gotAcorn = false;
  * | | | | | | | | | |
  * | | | | | | | | | |
  * | | | | | | | | | |
- * |x| | | | | | | | |
+ * | | | | | | | | |x|
  */
-
 const genGrid = () => {
 	for (let i = 0; i < gridDim; i++) {
 		const row = [];
 		for (let ii = 0; ii < gridDim; ii++) {
-			const val =
-				i === 0 && ii === 0 ? 'o' // Location on acorn
-				: currPos[0] === i && currPos[1] === ii ? 's' // Location of squirrel
-				: i === (gridDim - 1) && ii === (gridDim - 1) ? 'x' // Target location for the drop
-				: '';
-			row.push(val);
+			row.push('');
 		}
 		grid.push(row);
 	}
@@ -59,12 +58,10 @@ const checkProgress = () => {
 	// Acorn check
 	if (currPos[0] === 0 && currPos[1] === 0) {
 		gotAcorn = !gotAcorn;
-		// console.log('Got Acorn', gotAcorn);
 	}
 	// Done Check
 	if (currPos[0] === 8 && currPos[1] === 8 && gotAcorn) {
 		done = true;
-		console.log('DONE!\n');
 	}
 }
 
@@ -77,20 +74,17 @@ const hop = () => {
 }
 
 const doRun = () => {
-	console.log('************');
-	console.log('Starting Run');
-	console.log('************');
 	do {
 		hop();
 	} while (!done);
 }
 
-const calAvg = () => {
+const calcAvg = () => {
 	let total = 0;
 	for (let val of runResults) {
 		total += val;
 	}
-	console.log('Average', total / runResults.length, '\n');
+	return total / runResults.length;
 }
 
 const reset = () => {
@@ -101,24 +95,21 @@ const reset = () => {
 }
 
 const go = () => {
-	const startTime = new Date().toISOString();
+	genGrid();
+	console.log('Started @', new Date().toString());
 	let i = 0;
-	for (i; i < 100000; i++) {
+	for (i; i < 1000000; i++) {
+		const percentage = i / 100000 * 10;
 		doRun();
-		console.log('hops', hops);
 		runResults.push(hops);
-		if (runResults.length !== 1) {
-			calAvg();
-		}
 		reset();
+		if (percentage !== 0 && percentage % 10 === 0) {
+			console.log(`Progress: ${percentage}% complete, average: ${calcAvg()}`);
+		}
 	}
-	console.log('Started @', startTime);
-	console.log('Ended @', new Date().toISOString());
-	console.log('Runs', i);
+	console.log('Runs', new Intl.NumberFormat('en-GB').format(i));
+	console.log('Average', calcAvg());
+	console.log('Ended @', new Date().toString());
 }
-
-//console.log('Generating Grid');
-genGrid();
-//console.log('Grid Generated\n', grid, '\n');
 
 go();
