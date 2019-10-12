@@ -96,20 +96,31 @@ const reset = () => {
 
 const go = () => {
 	genGrid();
-	console.log('Started @', new Date().toString());
+	const started = new Date().toString();
 	let i = 0;
-	for (i; i < 1000000; i++) {
-		const percentage = i / 100000 * 10;
+	const interval = 10000;
+	let avgTally = '';
+	let continueCalc = true;
+	do {
 		doRun();
 		runResults.push(hops);
 		reset();
-		if (percentage !== 0 && percentage % 10 === 0) {
-			console.log(`Progress: ${percentage}% complete, average: ${calcAvg()}`);
+		const runAvg = calcAvg().toFixed(5);
+		if (avgTally === runAvg) {
+			continueCalc = false;
 		}
-	}
-	console.log('Runs', new Intl.NumberFormat('en-GB').format(i));
-	console.log('Average', calcAvg());
+		else {
+			avgTally = runAvg;
+		}
+		i++;
+		if (i !== 0 && i % interval === 0) {
+			console.log(`Runs: ${i}. Dataset size: ${runResults.length} Average: ${runAvg}`);
+		}
+	} while (continueCalc);
+	console.log('\nStarted @', started);
 	console.log('Ended @', new Date().toString());
+	console.log('Runs', new Intl.NumberFormat('en-ZA').format(i));
+	console.log('Average', calcAvg());
 }
 
 go();
